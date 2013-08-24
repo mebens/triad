@@ -1,0 +1,36 @@
+<project>
+  <name>Ludum Dare 27</name>
+  
+  <settings>
+    <defaultWidth>396</defaultWidth>
+    <defaultHeight>306</defaultHeight>
+    <minWidth>396</minWidth>
+    <minHeight>306</minHeight>
+    <maxWidth>25600</maxWidth>
+    <maxHeight>25600</maxHeight>
+    <bgColor>0xDDDDDD</bgColor>
+    <workingDirectory>../images</workingDirectory>
+  </settings>
+  
+  <tilesets>
+    <tileset name="tiles" image="tiles.png" tileWidth="9" tileHeight="9" paletteScale="2" />
+    <tileset name="collision" image="collision.png" tileWidth="9" tileHeight="9" paletteScale="2" />
+  </tilesets>
+  
+  <objects>
+    <object name="player" image="player.png" width="8" height="15" imageWidth="15" imageHeight="8" limit="3">
+      <values>
+        <integer name="type" default="1" />
+      </values>
+    </object>
+    
+    <object name="turret" image="turret-base.png" width="11" height="11" />
+  </objects>
+  
+  <layers>
+    <tiles name="collision" gridSize="9" gridColor="33FFFFFF" exportTileIDs="true" />
+    <tiles name="floor" gridSize="9" gridColor="33FFFFFF" exportTileIDs="true" />
+    <tiles name="walls" gridSize="9" gridColor="33FFFFFF" exportTileIDs="true" />
+    <objects name="objects" gridSize="1" drawGridSize="9" gridColor="33FFFFFF" />
+  </layers>
+</project>

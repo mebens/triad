@@ -1,0 +1,86 @@
+Spritemap = class("Spritemap")
+Spritemap._mt = {}
+
+function Spritemap._mt:__index(key)
+  return rawget(self, "_" .. key) or self.class.__instanceDict[key]
+end
+
+function Spritemap._mt:__newindex(key, value)
+  if key == "frame" then
+    if rawget(self, "_current") then self:stop() end
+    self._frame = value
+  else
+    rawset(self, key, value)
+  end
+end
+
+Spritemap:enableAccessors()
+
+function Spritemap:initialize(img, fw, fh, callback, ...)
+  self.active = true
+  self.visible = true
+  self._frame = 1
+  self._image = type(img) == "string" and love.graphics.newImage(img) or img
+  self._width = fw
+  self._height = fh
+  self._columns = math.floor(self._image:getWidth() / fw)
+  self._rows = math.floor(self._image:getHeight() / fh)
+  self._quads = {}
+  self._animations = {}  
+  
+  for y = 0, self._rows - 1 do
+    for x = 0, self._columns - 1 do
+      self._quads[#self._quads + 1] = love.graphics.newQuad(x * fw, y * fh, fw, fh, self._width, self._height)
+    end
+  end
+  
+  self:setCallback(callback, ...)
+  self:stop()
+  self:applyAccessors()
+end
+
+function Spritemap:update(dt)
+  if not self.active then return end
+  
+  if self._current then
+    local anim = self._animations[self._current]
+    
+    if self._timer <= 0 then
+      self._timer = self._timer + anim.time
+      
+      if self._animIndex == #anim.frames and not anim.loop then
+        self.callback(unpack(self.callbackArgs))
+        self:stop()
+      else
+        self._animIndex = self._animIndex % #anim.frames + 1
+      end
+    else
+      self._timer = self._timer - dt
+    end
+  end
+end
+
+function Spritemap:draw(x, y, r, sx, sy, ox, oy, kx, ky)
+  if not self.visible then return end
+  love.graphics.drawq(self._image, self._quads[self._frame], x, y, r, sx, sy, ox, oy, kx, ky)
+end
+
+function Spritemap:add(name, frames, rate, loop)
+  self._animations[name] = { frames = frames, loop = loop, time = 1 / rate }
+end
+
+function Spritemap:play(name)
+  self._current = name
+  self._timer = self._animations[name].time
+  self._frame = self._animations[name].frames[1]
+  self._animIndex = 1
+end
+
+function Spritemap:stop()
+  self._current = nil
+end
+
+function Spritemap:setCallback(callback, ...)
+  self.callback = callback
+  self.callbackArgs = { ... }
+end
