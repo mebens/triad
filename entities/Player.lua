@@ -1,6 +1,6 @@
 Player = class("Player", PhysicalEntity)
-Player.static.width = 8
-Player.static.height = 15
+Player.static.width = 7
+Player.static.height = 10
 Player.static.recordTime = 1 / 60
 
 function Player.static:fromXML(e)
@@ -14,10 +14,20 @@ function Player:initialize(x, y, type)
   self.height = Player.height
   self.speed = 1800
   self.health = 4
+  self.movementAngle = 0
   self.type = type
-  self.image = assets.images.player
   self.color = { 255, 255, 255 }
+  self.legsMap = Spritemap:new(assets.images.playerLegs, 11, 10)
+  self.legsMap:add("move", { 1, 2, 3, 4, 3, 2, 1, 5, 6, 7, 8, 7, 6, 5 }, 35, true)
   
+  if self.type == 1 then
+    self.image = assets.images.playerMg
+  elseif self.type == 2 then
+    self.image = assets.images.playerPs
+  elseif self.type == 3 then
+    self.image = assets.images.playerSg
+  end
+    
   self.bulletDeviation = math.tau / 128
   self.pelletDeviation = math.tau / 12
   self.pelletCount = 6
@@ -39,26 +49,18 @@ function Player:added()
   self.fixture:setMask(2)
   self:setMass(1)
   self:setLinearDamping(10)
-  
-  if self.world.allPlayers then
-    table.insert(self.world.allPlayers, self)
-    self.allIndex = #self.world.allPlayers
-  end
+  if self.world.allPlayers then self.world.allPlayers:push(self) end
 end
 
 function Player:removed()
-  if self.world.allPlayers then
-    PhysicalEntity.removed(self)
-    table.remove(self.world.allPlayers, self.allIndex)
-  end
+  PhysicalEntity.removed(self)
+  if self.world.allPlayers then self.world.allPlayers:remove(self) end
 end
 
 function Player:update(dt)
   PhysicalEntity.update(self, dt)
+  self.legsMap:update(dt)
   self:handleInput(dt)
-  
-  local dir = self:getDirection()
-  if dir then self:applyForce(self.speed * math.cos(dir), self.speed * math.sin(dir)) end
   
   if self.weaponTimer > 0 then
     self.weaponTimer = self.weaponTimer - dt
@@ -68,14 +70,10 @@ function Player:update(dt)
       self:fireBullet()
     end
   end
-  
-  -- temporary class changes
-  if key.pressed["1"] then self.type = 1 end
-  if key.pressed["2"] then self.type = 2 end
-  if key.pressed["3"] then self.type = 3 end
 end
 
 function Player:draw()
+  self.legsMap:draw(self.x, self.y, self.movementAngle, 1.2, 1.2, self.legsMap.width / 2, self.legsMap.height / 2)
   self:drawImage()
 end
 
@@ -83,8 +81,13 @@ function Player:handleInput(dt)
   self.angle = math.angle(self.x, self.y, getMouse())
   self.angle = math.floor(self.angle * 20 + .5) / 20
   
+  local dir = self:getDirection()
+  if dir then self:applyForce(self.speed * math.cos(dir), self.speed * math.sin(dir)) end
+  self.movementAngle = dir or self.angle
+  self:handleAnimation(dir)
+  
   if self.recordTimer < 0 then
-    self.posLog[#self.posLog + 1] = { self.world.elapsed, self.x, self.y, self.angle }
+    self.posLog[#self.posLog + 1] = { self.world.elapsed, self.x, self.y, self.angle, dir }
     self.recordTimer = Player.recordTime
   else
     self.recordTimer = self.recordTimer - dt
@@ -103,6 +106,15 @@ function Player:handleInput(dt)
   if input.pressed("fire") then self:handleSemiAutoFire() end
   if input.pressed("ability") then self:handleAbility() end
 end
+
+function Player:handleAnimation(moving)
+  if moving then
+    if self.legsMap.current ~= "move" then self.legsMap:play("move") end
+  else
+    self.legsMap:stop()
+    self.legsMap.frame = 1
+  end
+end 
 
 function Player:handleSemiAutoFire()
   if self.weaponTimer > 0 then return end
@@ -137,6 +149,7 @@ function Player:handleAbility()
 end 
 
 function Player:die()
+  self.dead = true
   self.world:endWave()
 end
 
@@ -146,7 +159,13 @@ function Player:damage(amount)
 end
 
 function Player:fireBullet()
-  self.world:add(Bullet:new(self.x, self.y, self.angle - self.bulletDeviation / 2 + self.bulletDeviation * math.random()))
+  local posAngle = self.angle + math.tau / 4
+  
+  self.world:add(Bullet:new(
+    self.x + math.cos(posAngle),
+    self.y + math.sin(posAngle),
+    self.angle - self.bulletDeviation / 2 + self.bulletDeviation * math.random()
+  ))
 end
 
 function Player:getDirection()

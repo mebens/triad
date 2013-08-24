@@ -13,8 +13,15 @@ function PlayerSelection:initialize(x, y, type)
   self.layer = 2
   self.width = Player.width
   self.height = Player.height
-  self.image = assets.images.player
   self.type = type
+  
+  if self.type == 1 then
+    self.image = assets.images.playerMg
+  elseif self.type == 2 then
+    self.image = assets.images.playerPs
+  elseif self.type == 3 then
+    self.image = assets.images.playerSg
+  end
 end
 
 function PlayerSelection:update(dt)

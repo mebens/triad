@@ -9,6 +9,7 @@ slaxml = require("slaxdom")
 
 require("misc.utils")
 require("misc.xmlFuncs")
+require("misc.fade")
 
 require("entities.HUD")
 require("entities.Floor")
@@ -26,9 +27,12 @@ require("worlds.LevelPlanning")
 require("worlds.LevelWave")
 
 function love.load()
-  assets.loadFont("uni05.ttf", 12, "main")
+  assets.loadFont("uni05.ttf", 14, "main")
   assets.loadImage("tiles.png")
-  assets.loadImage("player.png")
+  assets.loadImage("player-mg.png", "playerMg")
+  assets.loadImage("player-Ps.png", "playerPs")
+  assets.loadImage("player-sg.png", "playerSg")
+  assets.loadImage("player-legs.png", "playerLegs")
   assets.loadImage("turret-base.png", "turretBase")
   assets.loadImage("turret-gun.png", "turretGun")
   assets.loadImage("rocket.png")
@@ -50,6 +54,7 @@ function love.load()
 end
 
 function love.update(dt)
+  fade.update(dt)
   ammo.update(dt)
   input.update()
 end
@@ -58,4 +63,5 @@ function love.draw()
   postfx.start()
   ammo.draw()
   postfx.stop()
+  fade.draw()
 end

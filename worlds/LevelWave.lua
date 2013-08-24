@@ -9,17 +9,21 @@ function LevelWave:initialize(planning)
   self.planning = planning
   self.inWave = true
   self.elapsed = 0
-  self.allPlayers = {}
+  self.allPlayers = LinkedList:new("_playerNext", "_playerPrev")
   
   self.hud = HUD:new()
   self:add(self.hud)
   
-  local sel = planning.selection
-  self.player = Player:new(sel.x, sel.y, sel.type)
-  self:add(self.player)
+  if planning.selection then
+    local sel = planning.selection
+    self.player = Player:new(sel.x, sel.y, sel.type)
+    self:add(self.player)
+  else
+    self.replay = true
+  end
   
   for _, v in ipairs(planning.playerSelections) do
-    if v ~= sel and v.played then
+    if v ~= planning.selection and v.played then
       self:add(Replayer:new(v.x, v.y, v.type, v.inputLog, v.posLog))
     end
   end
@@ -38,7 +42,7 @@ function LevelWave:update(dt)
   
   if self.inWave then
     self.elapsed = self.elapsed + dt
-    if self.elapsed >= LevelWave.time then self:endWave() end
+    if self.elapsed >= LevelWave.time or self.allPlayers.length < 1 then self:endWave() end
   end
 end
 

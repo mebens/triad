@@ -1,3 +1,9 @@
+function table.copy(t)
+  local ret = {}
+  for k, v in pairs(t) do ret[k] = v end
+  return setmetatable(ret, getmetatable(t))
+end
+
 function getMouse()
   return love.mouse.getX() / postfx.scale, love.mouse.getY() / postfx.scale
 end

@@ -23,14 +23,17 @@ function Spritemap:initialize(img, fw, fh, callback, ...)
   self._image = type(img) == "string" and love.graphics.newImage(img) or img
   self._width = fw
   self._height = fh
-  self._columns = math.floor(self._image:getWidth() / fw)
-  self._rows = math.floor(self._image:getHeight() / fh)
   self._quads = {}
   self._animations = {}  
   
+  local iw = self._image:getWidth()
+  local ih = self._image:getHeight()
+  self._columns = math.floor(iw / fw)
+  self._rows = math.floor(ih / fh)
+  
   for y = 0, self._rows - 1 do
     for x = 0, self._columns - 1 do
-      self._quads[#self._quads + 1] = love.graphics.newQuad(x * fw, y * fh, fw, fh, self._width, self._height)
+      self._quads[#self._quads + 1] = love.graphics.newQuad(x * fw, y * fh, fw, fh, iw, ih)
     end
   end
   
@@ -53,6 +56,7 @@ function Spritemap:update(dt)
         self:stop()
       else
         self._animIndex = self._animIndex % #anim.frames + 1
+        self._frame = anim.frames[self._animIndex]
       end
     else
       self._timer = self._timer - dt

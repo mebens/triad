@@ -34,7 +34,7 @@ function Turret:update(dt)
   if self.deathTime and self.world.elapsed >= self.deathTime then self:die() end
   
   if self.target then
-    if self:inView(self.target) then
+    if not self.target.dead and self:inView(self.target) then
       local targetAngle = math.angle(self.x, self.y, self.target.x, self.target.y)
       self.angle = self.angle + math.min(targetAngle - self.angle, self.angleMoveRate * dt)
       
@@ -52,7 +52,7 @@ function Turret:update(dt)
   if not self.target then
     local targetDist
     
-    for _, v in ipairs(self.world.allPlayers) do
+    for v in self.world.allPlayers:iterate() do
       local dist = self:inView(v)
       
       if dist and (not self.target or dist < targetDist) then

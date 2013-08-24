@@ -6,7 +6,7 @@ end
 
 function Pellet:added()
   Bullet.added(self)
-  self:setLinearDamping(3)
+  self:setLinearDamping(4)
 end
 
 function Pellet:update(dt)

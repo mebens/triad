@@ -5,31 +5,39 @@ function Replayer:initialize(x, y, type, inputs, pos)
   self.color[4] = 150
   self.inputLog = inputs
   self.posLog = pos
+  self.inputLogCopy = table.copy(inputs)
+  self.posLogCopy = table.copy(pos)
 end
 
 function Replayer:handleInput(dt)
   -- positions/angles
-  for i = 1, #self.posLog do
-    local log = self.posLog[i]
+  local moveAngle = false
+  
+  for i = 1, #self.posLogCopy do
+    local log = self.posLogCopy[i]
     
     if log[1] > self.world.elapsed then
       if i > 1 then
         self.x = log[2]
         self.y = log[3]
         self.angle = log[4]
-        for i = 1, i - 1 do table.remove(self.posLog, 1) end
+        moveAngle = log[5]
+        for i = 1, i - 1 do table.remove(self.posLogCopy, 1) end
       end
       
       break
     end
   end
   
+  self.movementAngle = moveAngle or self.angle
+  self:handleAnimation(moveAngle)
+  
   -- inputs
-  if #self.inputLog > 1 then
+  if #self.inputLogCopy > 1 then
     local ahead
     
     repeat
-      local input = self.inputLog[1]
+      local input = self.inputLogCopy[1]
       if not input then break end
       ahead = input[1] > self.world.elapsed
       
@@ -46,7 +54,7 @@ function Replayer:handleInput(dt)
           self.inputDown[input[2]] = false
         end
         
-        table.remove(self.inputLog, 1)
+        table.remove(self.inputLogCopy, 1)
       end
     until ahead
   end
@@ -54,4 +62,5 @@ end
 
 function Replayer:die()
   self.world = nil
+  self.dead = true
 end

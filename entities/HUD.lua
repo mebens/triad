@@ -3,7 +3,7 @@ HUD = class("HUD", Entity)
 function HUD:initialize()
   Entity.initialize(self)
   self.layer = 0
-  self.timeTxt = Text:new{"10", font = assets.fonts.main[12], shadow = true }
+  self.timeTxt = Text:new{"10", font = assets.fonts.main[14], shadow = true }
   self.paddingX = 25
   self.paddingY = 12
 end

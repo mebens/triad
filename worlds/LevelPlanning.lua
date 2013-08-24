@@ -31,7 +31,22 @@ end
 
 function LevelPlanning:endWave(player)
   ammo.world = self
-  self.selection.inputLog = player.inputLog
-  self.selection.posLog = player.posLog
-  self.selection = nil
+  
+  if self.finalReplay then
+  else
+    local done = true
+    
+    for _, v in ipairs(self.playerSelections) do
+      if not v.played then done = false end
+    end
+    
+    self.selection.inputLog = player.inputLog
+    self.selection.posLog = player.posLog
+    self.selection = nil
+    
+    if done then
+      self.finalReplay = true
+      ammo.world = LevelWave:new(self)
+    end
+  end
 end
