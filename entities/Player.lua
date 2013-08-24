@@ -1,7 +1,7 @@
 Player = class("Player", PhysicalEntity)
 Player.static.width = 8
 Player.static.height = 15
-Player.static.mousePosTime = 0.2
+Player.static.recordTime = 1 / 60
 
 function Player.static:fromXML(e)
   return Player:new(tonumber(e.attr.x) + Player.width / 2, tonumber(e.attr.y) + Player.height / 2, tonumber(e.attr.type))
@@ -26,10 +26,10 @@ function Player:initialize(x, y, type)
   self.sgFireRate = 0.4
   self.weaponTimer = 0
   
-  self.mousePosTimer = 0
+  self.recordTimer = 0
   self.inputDown = {}
   self.inputLog = {}
-  self.angleLog = {}
+  self.posLog = {}
 end
 
 function Player:added()
@@ -83,14 +83,14 @@ function Player:handleInput(dt)
   self.angle = math.angle(self.x, self.y, getMouse())
   self.angle = math.floor(self.angle * 20 + .5) / 20
   
-  if self.mousePosTimer < 0 then
-    self.angleLog[#self.angleLog + 1] = self.angle
-    self.mousePosTimer = Player.mousePosTime
+  if self.recordTimer < 0 then
+    self.posLog[#self.posLog + 1] = { self.world.elapsed, self.x, self.y, self.angle }
+    self.recordTimer = Player.recordTime
   else
-    self.mousePosTimer = self.mousePosTimer - dt
+    self.recordTimer = self.recordTimer - dt
   end
   
-  for _, v in pairs{"left", "right", "up", "down", "fire", "ability"} do
+  for _, v in pairs{"fire", "ability"} do
     if input.pressed(v) then
       self.inputDown[v] = true
       self.inputLog[#self.inputLog + 1] = { self.world.elapsed, v, "pressed" }
@@ -137,7 +137,7 @@ function Player:handleAbility()
 end 
 
 function Player:die()
-  print(self.health)
+  self.world:endWave()
 end
 
 function Player:damage(amount)
@@ -150,13 +150,8 @@ function Player:fireBullet()
 end
 
 function Player:getDirection()
-  local xAxis = 0
-  local yAxis = 0
-  
-  if self.inputDown.left then xAxis = xAxis - 1 end
-  if self.inputDown.right then xAxis = xAxis + 1 end
-  if self.inputDown.up then yAxis = yAxis - 1 end
-  if self.inputDown.down then yAxis = yAxis + 1 end
+  local xAxis = input.axisDown("left", "right")
+  local yAxis = input.axisDown("up", "down")
   
   local xAngle = xAxis == 1 and 0 or (xAxis == -1 and math.tau / 2 or nil)
   local yAngle = yAxis == 1 and math.tau / 4 or (yAxis == -1 and math.tau * 0.75 or nil)

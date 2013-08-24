@@ -6,7 +6,7 @@ function Turret.static:fromXML(e)
   return Turret:new(tonumber(e.attr.x) + Turret.width / 2, tonumber(e.attr.y) + Turret.height / 2)
 end
 
-function Turret:initialize(x, y)
+function Turret:initialize(x, y, ref)
   PhysicalEntity.initialize(self, x, y, "static")
   self.baseImg = assets.images.turretBase
   self.gunImg = assets.images.turretGun
@@ -14,7 +14,9 @@ function Turret:initialize(x, y)
   self.height = self.baseImg:getHeight()
   self.health = 10
   self.fireTimer = 0
+  self.planningRef = ref
   
+  if ref then self.deathTime = ref.deathTime end
   self.fireTime = 0.1
   self.viewLength = 300
   self.angleMoveRate = math.tau * 3
@@ -29,6 +31,7 @@ end
 
 function Turret:update(dt)
   PhysicalEntity.update(self, dt)
+  if self.deathTime and self.world.elapsed >= self.deathTime then self:die() end
   
   if self.target then
     if self:inView(self.target) then
@@ -67,6 +70,10 @@ end
 
 function Turret:die()
   self.world = nil
+  
+  if not self.deathTime then
+    self.planningRef.deathTime = self.world.elapsed
+  end
 end
 
 function Turret:damage(amount)

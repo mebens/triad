@@ -4,13 +4,22 @@ function LevelPlanning:initialize(name)
   local xmlFile = love.filesystem.read("assets/levels/" .. name .. ".oel")
   LevelBase.initialize(self, slaxml:dom(xmlFile).root)
   self.name = tostring(name)
-  self:loadObjects(false)
   self.playerSelections = {}
+  self.turrets = {}
   
-  for _, v in ipairs(findChildren(findChild(self.xml, "objects"), "player")) do
+  local obj = findChild(self.xml, "objects")
+  
+  for _, v in ipairs(findChildren(obj, "player")) do
     local p = PlayerSelection:fromXML(v)
     self.playerSelections[#self.playerSelections + 1] = p
     self:add(p)
+  end
+  
+  for _, v in ipairs(findChildren(obj, "turret")) do
+    local t = Turret:fromXML(v)
+    t.active = false
+    self.turrets[#self.turrets + 1] = t
+    self:add(t)
   end
 end
 
@@ -23,6 +32,6 @@ end
 function LevelPlanning:endWave(player)
   ammo.world = self
   self.selection.inputLog = player.inputLog
-  self.selection.angleLog = player.angleLog
+  self.selection.posLog = player.posLog
   self.selection = nil
 end

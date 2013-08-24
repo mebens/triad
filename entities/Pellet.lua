@@ -2,7 +2,6 @@ Pellet = class("Pellet", Bullet)
 
 function Pellet:initialize(x, y, angle)
   Bullet.initialize(self, x, y, angle)
-  self.damage = 4
 end
 
 function Pellet:added()

@@ -13,7 +13,6 @@ function LevelWave:initialize(planning)
   
   self.hud = HUD:new()
   self:add(self.hud)
-  self:loadObjects()
   
   local sel = planning.selection
   self.player = Player:new(sel.x, sel.y, sel.type)
@@ -21,8 +20,12 @@ function LevelWave:initialize(planning)
   
   for _, v in ipairs(planning.playerSelections) do
     if v ~= sel and v.played then
-      self:add(Replayer:new(v.x, v.y, v.type, v.inputLog, v.angleLog))
+      self:add(Replayer:new(v.x, v.y, v.type, v.inputLog, v.posLog))
     end
+  end
+  
+  for _, v in ipairs(planning.turrets) do
+    self:add(Turret:new(v.x, v.y, v))
   end
 end
 
