@@ -10,17 +10,23 @@ slaxml = require("slaxdom")
 require("misc.utils")
 require("misc.xmlFuncs")
 
+require("entities.HUD")
 require("entities.Floor")
 require("entities.Walls")
 require("entities.Player")
+require("entities.Replayer")
+require("entities.PlayerSelection")
 require("entities.Turret")
 require("entities.Rocket")
 require("entities.Bullet")
 require("entities.Pellet")
 
-require("worlds.Level")
+require("worlds.LevelBase")
+require("worlds.LevelPlanning")
+require("worlds.LevelWave")
 
 function love.load()
+  assets.loadFont("uni05.ttf", 12, "main")
   assets.loadImage("tiles.png")
   assets.loadImage("player.png")
   assets.loadImage("turret-base.png", "turretBase")
@@ -30,6 +36,8 @@ function love.load()
   
   postfx.init()
   postfx.scale = 2
+  love.graphics.width = love.graphics.width / postfx.scale
+  love.graphics.height = love.graphics.height / postfx.scale
   
   input.define("left", "a", "left")
   input.define("right", "d", "right")
@@ -38,7 +46,7 @@ function love.load()
   input.define{"fire", mouse = "l" }
   input.define{"ability", mouse = "r" }
   
-  ammo.world = Level:new("1")
+  ammo.world = LevelPlanning:new("1")
 end
 
 function love.update(dt)

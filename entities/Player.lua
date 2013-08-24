@@ -1,16 +1,17 @@
 Player = class("Player", PhysicalEntity)
-Player.static.all = {}
+Player.static.width = 8
+Player.static.height = 15
 Player.static.mousePosTime = 0.2
 
 function Player.static:fromXML(e)
-  return Player:new(tonumber(e.attr.x), tonumber(e.attr.y), 1)
+  return Player:new(tonumber(e.attr.x) + Player.width / 2, tonumber(e.attr.y) + Player.height / 2, tonumber(e.attr.type))
 end
 
 function Player:initialize(x, y, type)
   PhysicalEntity.initialize(self, x, y, "dynamic")
   self.layer = 2
-  self.width = 8
-  self.height = 15
+  self.width = Player.width
+  self.height = Player.height
   self.speed = 1800
   self.health = 4
   self.type = type
@@ -35,15 +36,21 @@ function Player:added()
   self:setupBody()
   self.fixture = self:addShape(love.physics.newRectangleShape(self.width, self.height))
   self.fixture:setCategory(2)
+  self.fixture:setMask(2)
   self:setMass(1)
   self:setLinearDamping(10)
-  Player.all[#Player.all + 1] = self
-  self.allIndex = #Player.all
+  
+  if self.world.allPlayers then
+    table.insert(self.world.allPlayers, self)
+    self.allIndex = #self.world.allPlayers
+  end
 end
 
 function Player:removed()
-  PhysicalEntity.removed(self)
-  table.remove(Player.all, self.allIndex)
+  if self.world.allPlayers then
+    PhysicalEntity.removed(self)
+    table.remove(self.world.allPlayers, self.allIndex)
+  end
 end
 
 function Player:update(dt)

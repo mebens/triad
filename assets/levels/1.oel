@@ -72,8 +72,10 @@
     <rect id="3" x="27" y="279" w="342" h="9"/>
   </walls>
   <objects>
-    <player x="189" y="253"/>
+    <player x="172" y="254" type="1"/>
     <turret x="98" y="172"/>
     <turret x="284" y="172"/>
+    <player x="192" y="254" type="2"/>
+    <player x="212" y="254" type="3"/>
   </objects>
 </level>

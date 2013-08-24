@@ -1,7 +1,9 @@
 Turret = class("Turret", PhysicalEntity)
+Turret.static.width = 11
+Turret.static.height = 11
 
 function Turret.static:fromXML(e)
-  return Turret:new(tonumber(e.attr.x), tonumber(e.attr.y))
+  return Turret:new(tonumber(e.attr.x) + Turret.width / 2, tonumber(e.attr.y) + Turret.height / 2)
 end
 
 function Turret:initialize(x, y)
@@ -47,7 +49,7 @@ function Turret:update(dt)
   if not self.target then
     local targetDist
     
-    for _, v in ipairs(Player.all) do
+    for _, v in ipairs(self.world.allPlayers) do
       local dist = self:inView(v)
       
       if dist and (not self.target or dist < targetDist) then

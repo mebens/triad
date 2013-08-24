@@ -18,7 +18,7 @@
   </tilesets>
   
   <objects>
-    <object name="player" image="player.png" width="8" height="15" imageWidth="15" imageHeight="8" limit="3">
+    <object name="player" image="player.png" width="8" height="15" imageWidth="8" imageHeight="15" limit="3">
       <values>
         <integer name="type" default="1" />
       </values>

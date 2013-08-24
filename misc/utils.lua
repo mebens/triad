@@ -13,6 +13,18 @@ function getRectImage(width, height, r, g, b, a)
   return love.graphics.newImage(data)
 end
 
+function drawArc(x, y, r, angle1, angle2, segments)
+  local i = angle1
+  local j = 0
+  local step = math.tau / segments
+  
+  while i < angle2 do
+    j = angle2 - i < step and angle2 or i + step
+    love.graphics.line(x + (math.cos(i) * r), y - (math.sin(i) * r), x + (math.cos(j) * r), y - (math.sin(j) * r))
+    i = j
+  end  
+end
+
 function Entity:drawImage(image, x, y)
   image = image or self.image
   if self.color then love.graphics.setColor(self.color) end
