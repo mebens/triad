@@ -8,7 +8,7 @@
     <minHeight>306</minHeight>
     <maxWidth>25600</maxWidth>
     <maxHeight>25600</maxHeight>
-    <bgColor>0xDDDDDD</bgColor>
+    <bgColor>0x444444</bgColor>
     <workingDirectory>../images</workingDirectory>
   </settings>
   
@@ -18,13 +18,14 @@
   </tilesets>
   
   <objects>
-    <object name="player" image="player.png" width="8" height="15" imageWidth="8" imageHeight="15" limit="3">
+    <object name="player" image="player-ps.png" width="7" height="9" imageOffsetX="6" imageWidth="7" imageHeight="9" limit="3">
       <values>
         <integer name="type" default="1" />
       </values>
     </object>
     
     <object name="turret" image="turret-base.png" width="11" height="11" />
+    <object name="weakWall" image="editor.png" width="9" height="9" resizableX="true" resizableY="true" imageWidth="9" imageHeight="9" imageOffsetX="54" tile="true" />
   </objects>
   
   <layers>
@@ -32,5 +33,6 @@
     <tiles name="floor" gridSize="9" gridColor="33FFFFFF" exportTileIDs="true" />
     <tiles name="walls" gridSize="9" gridColor="33FFFFFF" exportTileIDs="true" />
     <objects name="objects" gridSize="1" drawGridSize="9" gridColor="33FFFFFF" />
+    <objects name="tiledObjects" gridSize="9" gridColor="33FFFFFF" />
   </layers>
 </project>

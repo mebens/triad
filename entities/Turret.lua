@@ -12,7 +12,7 @@ function Turret:initialize(x, y, ref)
   self.gunImg = assets.images.turretGun
   self.width = self.baseImg:getWidth()
   self.height = self.baseImg:getHeight()
-  self.health = 10
+  self.health = 12
   self.fireTimer = 0
   self.planningRef = ref
   
@@ -27,6 +27,12 @@ function Turret:added()
   self:setupBody()
   self.fixture = self:addShape(love.physics.newRectangleShape(self.width, self.height))
   self.fixture:setCategory(3)
+  if self.world.allTurrets then self.world.allTurrets:push(self) end
+end
+
+function Turret:removed()
+  PhysicalEntity.removed(self)
+  if self.world.allTurrets then self.world.allTurrets:remove(self) end
 end
 
 function Turret:update(dt)

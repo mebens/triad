@@ -1,0 +1,19 @@
+<level>
+  <width>396</width>
+  <height>306</height>
+  <collision set="collision">
+    <rect id="0" x="72" y="117" w="54" h="45"/>
+  </collision>
+  <floor set="tiles">
+    <rect id="9" x="0" y="0" w="396" h="306"/>
+  </floor>
+  <walls set="tiles">
+    <rect id="0" x="72" y="117" w="54" h="45"/>
+  </walls>
+  <objects>
+    <player x="136" y="228" type="1"/>
+    <player x="174" y="230" type="2"/>
+    <player x="206" y="233" type="3"/>
+    <turret x="263" y="106"/>
+  </objects>
+</level>

@@ -3,14 +3,14 @@ LevelWave.static.time = 10
 
 function LevelWave:initialize(planning)
   LevelBase.initialize(self, planning.xml)
-  self.name = planning.name
   self.width = planning.width
   self.height = planning.height
   self.planning = planning
   self.inWave = true
+  self.paused = false
   self.elapsed = 0
   self.allPlayers = LinkedList:new("_playerNext", "_playerPrev")
-  
+  self.allTurrets = LinkedList:new("_turretNext", "_turretPrev")
   self.hud = HUD:new()
   self:add(self.hud)
   
@@ -38,14 +38,33 @@ function LevelWave:start()
 end
 
 function LevelWave:update(dt)
+  if key.pressed.t then self.paused = not self.paused end
+  if self.paused then return end
   PhysicalWorld.update(self, dt)
   
   if self.inWave then
     self.elapsed = self.elapsed + dt
-    if self.elapsed >= LevelWave.time or self.allPlayers.length < 1 then self:endWave() end
+    
+    if self.elapsed >= LevelWave.time or self.allPlayers.length < 1 or (not self.replay and self.allTurrets.length < 1) then
+      self:endWave()
+    end
+  end
+  
+  if self.replay then
+    local restart = input.pressed("restart")
+    
+    if not self.planning.allEnemiesKilled then
+      restart = restart or input.pressed("progress")
+    elseif input.pressed("progress") then
+      self.planning:nextLevel()
+    end
+    
+    if restart then self.planning:restart() end
   end
 end
 
 function LevelWave:endWave()
-  self.planning:endWave(self.player)
+  self.inWave = false
+  if self.player then self.player:closeInputs() end
+  if not self.replay then self.planning:endWave(self.player) end
 end

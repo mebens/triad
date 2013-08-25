@@ -8,6 +8,11 @@ function HUD:initialize()
   self.paddingY = 12
 end
 
+function HUD:added()
+  self.timeTxt.color[4] = 0
+  tween(self.timeTxt.color, 0.25, { [4] = 255 })
+end
+
 function HUD:update(dt)
   if self.world.inWave then self.timeTxt.text = math.ceil(LevelWave.time - self.world.elapsed) end
 end

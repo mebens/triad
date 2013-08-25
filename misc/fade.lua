@@ -22,7 +22,7 @@ end
 function fade.draw()
   if fade.alpha == 0 then return end
   love.graphics.storeColor()
-  love.graphics.setColor(0, 0, 0)
+  love.graphics.setColor(0, 0, 0, fade.alpha)
   love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
   love.graphics.resetColor()
 end

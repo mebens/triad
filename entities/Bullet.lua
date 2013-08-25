@@ -13,10 +13,12 @@ function Bullet:initialize(x, y, angle, enemy)
   self.enemy = enemy or false
   self.damage = 3
   self.image = Bullet.image
+  self.id = {}
 end
 
 function Bullet:added()
   self:setupBody()
+  self:setBullet(true)
   self.fixture = self:addShape(love.physics.newRectangleShape(self.width, self.height))
   
   if self.enemy then
@@ -35,14 +37,17 @@ function Bullet:draw()
 end
 
 function Bullet:die()
+  self.dead = true
   self.world = nil
 end
 
 function Bullet:collided(other, fixture, otherFixture, contact)
+  if self.dead then return end
+  if instanceOf(Bullet, other) or instanceOf(Rocket, other) then return end
   self:die()
   
   if self.enemy then
-    if instanceOf(Player, other) then other:damage(self.damage) end
+    if instanceOf(Player, other) then other:bulletHit(self) end
   elseif instanceOf(Turret, other) then
     other:damage(self.damage)
   end

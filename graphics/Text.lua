@@ -43,7 +43,7 @@ function Text:draw(x, y)
   love.graphics.storeColor()
 
   if self.shadow then
-    love.graphics.setColor(20, 20, 20)
+    love.graphics.setColor(20, 20, 20, self.color[4])
     love.graphics.printf(self._text, x or self.x, y or self.y, self.width, self.align)
   end
 

@@ -14,6 +14,7 @@ function PlayerSelection:initialize(x, y, type)
   self.width = Player.width
   self.height = Player.height
   self.type = type
+  self.alpha = 255
   
   if self.type == 1 then
     self.image = assets.images.playerMg
@@ -39,13 +40,13 @@ end
 
 function PlayerSelection:draw()
   if self.played then
-    love.graphics.setColor(255, 0, 0, 200)
+    love.graphics.setColor(255, 0, 0, math.max(0, self.alpha - 55))
     self.scale = 1
   elseif self.mouseOver then
-    love.graphics.setColor(255, 255, 255, 255)
+    love.graphics.setColor(255, 255, 255, self.alpha)
     self.scale = 1.2
   else
-    love.graphics.setColor(255, 255, 255, 150)
+    love.graphics.setColor(255, 255, 255, math.max(0, self.alpha - 105))
     self.scale = 1
   end
   

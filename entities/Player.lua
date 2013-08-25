@@ -1,7 +1,7 @@
 Player = class("Player", PhysicalEntity)
 Player.static.width = 7
-Player.static.height = 10
-Player.static.recordTime = 1 / 60
+Player.static.height = 9
+Player.static.recordTime = 1 / 100
 
 function Player.static:fromXML(e)
   return Player:new(tonumber(e.attr.x) + Player.width / 2, tonumber(e.attr.y) + Player.height / 2, tonumber(e.attr.type))
@@ -13,6 +13,9 @@ function Player:initialize(x, y, type)
   self.width = Player.width
   self.height = Player.height
   self.speed = 1800
+  self.shieldSpeed = 800
+  self.shieldMaxHealth = 200
+  self.shieldHealth = self.shieldMaxHealth
   self.health = 4
   self.movementAngle = 0
   self.type = type
@@ -24,6 +27,8 @@ function Player:initialize(x, y, type)
     self.image = assets.images.playerMg
   elseif self.type == 2 then
     self.image = assets.images.playerPs
+    self.shieldImg = assets.images.playerShield
+    self.shield = false
   elseif self.type == 3 then
     self.image = assets.images.playerSg
   end
@@ -74,7 +79,22 @@ end
 
 function Player:draw()
   self.legsMap:draw(self.x, self.y, self.movementAngle, 1.2, 1.2, self.legsMap.width / 2, self.legsMap.height / 2)
-  self:drawImage()
+  
+  if self.shield then
+    local ratio = self.shieldHealth / self.shieldMaxHealth
+    
+    if ratio < 0.75 then
+      local gb = math.scale(ratio, 0, 0.75, 0, 220)
+      love.graphics.setColor(220, gb, gb)
+    else
+      love.graphics.setColor(220, 220, 220)
+    end
+    
+    drawArc(self.x, self.y, math.sqrt(self.width ^ 2 + self.height ^ 2) * 0.625, 0, math.tau * ratio, 15)
+    self:drawImage(self.shieldImg)
+  else
+    self:drawImage()
+  end
 end
 
 function Player:handleInput(dt)
@@ -82,7 +102,8 @@ function Player:handleInput(dt)
   self.angle = math.floor(self.angle * 20 + .5) / 20
   
   local dir = self:getDirection()
-  if dir then self:applyForce(self.speed * math.cos(dir), self.speed * math.sin(dir)) end
+  local speed = self.shield and self.shieldSpeed or self.speed
+  if dir then self:applyForce(speed * math.cos(dir), speed * math.sin(dir)) end
   self.movementAngle = dir or self.angle
   self:handleAnimation(dir)
   
@@ -141,7 +162,7 @@ function Player:handleAbility()
   if self.type == 1 then
     
   elseif self.type == 2 then
-    
+    self.shield = not self.shield
   elseif self.type == 3 then
     self.world:add(Rocket:new(self.x, self.y, self.angle))
     self.abilityUsed = true
@@ -153,17 +174,51 @@ function Player:die()
   self.world:endWave()
 end
 
+function Player:closeInputs()
+  for k, v in pairs(self.inputDown) do
+    self.inputLog[#self.inputLog + 1] = { self.world.elapsed, k, "released" }
+  end
+end
+
 function Player:damage(amount)
   self.health = self.health - amount
   if self.health <= 0 then self:die() end
+  if self.colorTween and self.colorTween.active then self.colorTween:stop() end
+  
+  self.colorTween = tween(self.color, 0.25, { 255, 0, 0 }, nil, function()
+    tween(self.color, 0.25, { 255, 255, 255 })
+  end)
+end
+
+function Player:bulletHit(bullet)
+  local damage = true
+  
+  if self.shield then
+    local bp = Vector:new(bullet.x - 10 * math.cos(bullet.angle), bullet.y - 10 * math.sin(bullet.angle))
+    local pos = (bp - self.pos):normalized()
+    local facing = Vector:new(math.cos(self.angle), math.sin(self.angle))
+    local angle = math.acos(facing * pos)
+    
+    if angle < math.tau * 0.16667 then
+      damage = false
+      self.shieldHealth = self.shieldHealth - bullet.damage
+      
+      if self.shieldHealth <= 0 then
+        self.shield = false
+        self.abilityUsed = true
+      end
+    end
+  end
+  
+  if damage then self:damage(bullet.damage) end
 end
 
 function Player:fireBullet()
-  local posAngle = self.angle + math.tau / 4
+  local posAngle = self.angle + math.tau / 4 -- gun pos compensation
   
   self.world:add(Bullet:new(
-    self.x + math.cos(posAngle),
-    self.y + math.sin(posAngle),
+    self.x + math.cos(posAngle) + math.cos(self.angle) * self.width / 2,
+    self.y + math.sin(posAngle) + math.sin(self.angle) * self.height / 2,
     self.angle - self.bulletDeviation / 2 + self.bulletDeviation * math.random()
   ))
 end

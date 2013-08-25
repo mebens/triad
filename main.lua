@@ -32,6 +32,7 @@ function love.load()
   assets.loadImage("player-mg.png", "playerMg")
   assets.loadImage("player-Ps.png", "playerPs")
   assets.loadImage("player-sg.png", "playerSg")
+  assets.loadImage("player-shield.png", "playerShield")
   assets.loadImage("player-legs.png", "playerLegs")
   assets.loadImage("turret-base.png", "turretBase")
   assets.loadImage("turret-gun.png", "turretGun")
@@ -49,8 +50,11 @@ function love.load()
   input.define("down", "s", "down")
   input.define{"fire", mouse = "l" }
   input.define{"ability", mouse = "r" }
+  input.define("progress", " ")
+  input.define("restart", "r")
   
-  ammo.world = LevelPlanning:new("1")
+  paused = false
+  ammo.world = LevelPlanning:new(1)
 end
 
 function love.update(dt)

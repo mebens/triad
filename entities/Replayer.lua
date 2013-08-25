@@ -57,6 +57,8 @@ function Replayer:handleInput(dt)
         table.remove(self.inputLogCopy, 1)
       end
     until ahead
+  elseif self.world.elapsed > LevelWave.time then
+    self.inputDown = {}
   end
 end
 
