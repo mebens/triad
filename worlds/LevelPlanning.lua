@@ -1,5 +1,5 @@
 LevelPlanning = class("LevelPlanning", LevelBase)
-LevelPlanning.static.levels = { "1", "2", "3", "4", "5", "6", "7", "9" }
+LevelPlanning.static.levels = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }
 
 function LevelPlanning:initialize(index, xml)
   if not xml then
@@ -43,6 +43,11 @@ function LevelPlanning:update(dt)
   LevelBase.update(self, dt)
   if key.pressed.n then self:nextLevel() end
   if input.pressed("restart") then self:restart() end
+end
+
+function LevelPlanning:draw()
+  LevelBase.draw(self, dt)
+  drawCrosshair()
 end
 
 function LevelPlanning:beginWave(selection)

@@ -7,6 +7,7 @@ function HUD:initialize()
   self.message = Text:new{"", font = assets.fonts.main[8], align = "center", shadow = true}
   self.paddingX = 30
   self.paddingY = 12
+  self.crosshair = assets.images.crosshair
 end
 
 function HUD:added()
@@ -40,5 +41,7 @@ function HUD:draw()
       love.graphics.width - self.paddingX - self.timeTxt.fontWidth / 2,
       self.paddingY + self.timeTxt.fontHeight / 2
     )
+    
+    drawCrosshair()
   end
 end

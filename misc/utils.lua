@@ -31,6 +31,18 @@ function drawArc(x, y, r, angle1, angle2, segments)
   end  
 end
 
+function drawCrosshair()
+  local mx, my = getMouse()
+  local imgW = assets.images.crosshair:getWidth()
+  local imgH = assets.images.crosshair:getHeight()
+  
+  love.graphics.storeColor()
+  love.graphics.setColor(20, 20, 20)
+  love.graphics.draw(assets.images.crosshair, mx, my, 0, 1, 1, imgW / 2, imgH / 2)
+  love.graphics.setColor(255, 255, 255)
+  love.graphics.draw(assets.images.crosshair, mx - 1, my - 1, 0, 1, 1, imgW / 2, imgH / 2)
+end
+
 function playRandom(sounds, volume, pan)
   local sound = sounds[math.random(1, #sounds)]
   return sound:play(volume, pan)

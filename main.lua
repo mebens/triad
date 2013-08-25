@@ -34,6 +34,7 @@ TILE_SIZE = 9
 function love.load()
   assets.loadFont("uni05.ttf", { 16, 8 }, "main")
   assets.loadImage("tiles.png")
+  assets.loadImage("crosshair.png")
   assets.loadImage("player-mg.png", "playerMg")
   assets.loadImage("player-Ps.png", "playerPs")
   assets.loadImage("player-sg.png", "playerSg")
@@ -71,6 +72,7 @@ function love.load()
   postfx.scale = 2
   love.graphics.width = love.graphics.width / postfx.scale
   love.graphics.height = love.graphics.height / postfx.scale
+  love.mouse.setVisible(false)
   
   input.define("left", "a", "left")
   input.define("right", "d", "right")
@@ -80,6 +82,7 @@ function love.load()
   input.define{"ability", mouse = "r" }
   input.define("progress", " ")
   input.define("restart", "r")
+  input.define("quit", "escape")
   
   paused = false
   ammo.world = LevelPlanning:new(1)
@@ -88,6 +91,7 @@ end
 function love.update(dt)
   fade.update(dt)
   ammo.update(dt)
+  if input.pressed("quit") then love.event.quit() end
   input.update()
 end
 
