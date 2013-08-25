@@ -21,8 +21,12 @@ function Player:initialize(x, y, type)
   self.movementAngle = 0
   self.type = type
   self.color = { 255, 255, 255 }
+  
+  local frames = { 1, 2, 3, 4, 3, 2, 1, 5, 6, 7, 8, 7, 6, 5 }
   self.legsMap = Spritemap:new(assets.images.playerLegs, 11, 10)
-  self.legsMap:add("move", { 1, 2, 3, 4, 3, 2, 1, 5, 6, 7, 8, 7, 6, 5 }, 35, true)
+  self.legsMap:add("move", frames, 35, true)
+  self.stepTime = #frames * (1 / 35) / 2
+  self.stepTimer = 0
   
   if self.type == 1 then
     self.image = assets.images.playerMg
@@ -78,6 +82,8 @@ function Player:update(dt)
       playRandom{assets.sfx.shoot1, assets.sfx.shoot2, assets.sfx.shoot3}
     end
   end
+  
+  if self.stepTimer > 0 then self.stepTimer = self.stepTimer - dt end
 end
 
 function Player:draw()
@@ -133,6 +139,11 @@ end
 
 function Player:handleAnimation(moving)
   if moving then
+    if self.stepTimer <= 0 then
+      playRandom{assets.sfx.step1, assets.sfx.step2, assets.sfx.step3, assets.sfx.step4}
+      self.stepTimer = self.stepTimer + self.stepTime
+    end
+    
     if self.legsMap.current ~= "move" then self.legsMap:play("move") end
   else
     self.legsMap:stop()
