@@ -71,8 +71,7 @@ end
 function LevelPlanning:endWave(player)
   ammo.world = self
   
-  if self.finalReplay then
-  else
+  if not self.finalReplay and self.selection then
     local done = true
     self.allEnemiesKilled = true
     

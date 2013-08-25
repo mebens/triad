@@ -10,6 +10,7 @@ slaxml = require("slaxdom")
 require("misc.utils")
 require("misc.xmlFuncs")
 require("misc.fade")
+require("misc.noise")
 
 require("entities.HUD")
 require("entities.Floor")
@@ -28,11 +29,15 @@ require("entities.Smoke")
 require("worlds.LevelBase")
 require("worlds.LevelPlanning")
 require("worlds.LevelWave")
+require("worlds.Tutorial")
 
 TILE_SIZE = 9
 
 function love.load()
   assets.loadFont("uni05.ttf", { 16, 8 }, "main")
+  assets.loadMusic("music.mp3")
+  assets.loadEffect("noise.frag")
+  
   assets.loadImage("tiles.png")
   assets.loadImage("crosshair.png")
   assets.loadImage("player-mg.png", "playerMg")
@@ -45,6 +50,10 @@ function love.load()
   assets.loadImage("weak-wall.png", "weakWall")
   assets.loadImage("smoke.png")
   assets.loadImage("rocket.png")
+  assets.loadImage("tutorial-mg.png", "tutorialMg")
+  assets.loadImage("tutorial-ps.png", "tutorialPs")
+  assets.loadImage("tutorial-sg.png", "tutorialSg")
+  assets.loadImage("tutorial-walls.png", "tutorialWalls")
   for _, v in pairs(assets.images) do v:setFilter("nearest", "nearest") end
   
   assets.loadSfx("death1.mp3")
@@ -68,8 +77,10 @@ function love.load()
   assets.loadSfx("smoke1.mp3", 0.3)
   assets.loadSfx("smoke2.mp3", 0.3)
   
+  noise:init()
   postfx.init()
   postfx.scale = 2
+  postfx.add(noise)
   love.graphics.width = love.graphics.width / postfx.scale
   love.graphics.height = love.graphics.height / postfx.scale
   love.mouse.setVisible(false)
@@ -82,16 +93,26 @@ function love.load()
   input.define{"ability", mouse = "r" }
   input.define("progress", " ")
   input.define("restart", "r")
+  input.define("muteMusic", "m")
   input.define("quit", "escape")
   
+  music = assets.music.music:loop()
+  musicMuted = false
   paused = false
-  ammo.world = LevelPlanning:new(1)
+  ammo.world = Tutorial:new()
 end
 
 function love.update(dt)
   fade.update(dt)
+  postfx.update(dt)
   ammo.update(dt)
   if input.pressed("quit") then love.event.quit() end
+  
+  if input.pressed("muteMusic") then
+    musicMuted = not musicMuted
+    music:setVolume(musicMuted and 0 or 1)
+  end
+  
   input.update()
 end
 

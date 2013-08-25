@@ -8,7 +8,7 @@ function Walls:initialize(xml, width, height)
   self.map = Tilemap:new(assets.images.tiles, TILE_SIZE, TILE_SIZE, width, height)
   self.map.usePositions = true
   self.xml = xml
-  self.color = { 220, 220, 220 }
+  self.color = { 200, 200, 200 }
 end
 
 function Walls:added()
