@@ -11,8 +11,8 @@ end
 function PlayerSelection:initialize(x, y, type)
   Entity.initialize(self, x, y)
   self.layer = 2
-  self.width = Player.width
-  self.height = Player.height
+  self.width = Player.width * 1.5
+  self.height = Player.height * 1.5
   self.type = type
   self.alpha = 255
   

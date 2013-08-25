@@ -31,6 +31,11 @@ function drawArc(x, y, r, angle1, angle2, segments)
   end  
 end
 
+function playRandom(sounds, volume, pan)
+  local sound = sounds[math.random(1, #sounds)]
+  return sound:play(volume, pan)
+end
+
 function Entity:drawImage(image, x, y)
   image = image or self.image
   if self.color then love.graphics.setColor(self.color) end

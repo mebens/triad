@@ -1,7 +1,24 @@
 WeakWall = class("WeakWall", PhysicalEntity)
+WeakWall.static.chunkWidth = 3
+WeakWall.static.chunkHeight = 3
 
 function WeakWall.static:fromXML(e)
   return WeakWall:new(tonumber(e.attr.x), tonumber(e.attr.y), tonumber(e.attr.width), tonumber(e.attr.height))
+end
+
+function WeakWall.static:generateQuads()
+  WeakWall.chunkQuads = {}
+  local cw, ch = 3, 3
+  local iw = assets.images.weakWall:getWidth()
+  local ih = assets.images.weakWall:getHeight()
+  
+  for i = 1, 12 do
+    WeakWall.chunkQuads[i] = love.graphics.newQuad(
+      math.random(0, iw - WeakWall.chunkWidth - 1),
+      math.random(0, ih - WeakWall.chunkHeight - 1),
+      WeakWall.chunkWidth, WeakWall.chunkHeight, iw, ih
+    )
+  end
 end
 
 function WeakWall:initialize(x, y, width, height)
@@ -10,6 +27,7 @@ function WeakWall:initialize(x, y, width, height)
   self.width = width
   self.height = height
   self.map = Tilemap:new(assets.images.weakWall, TILE_SIZE, TILE_SIZE, width, height)
+  if not WeakWall.chunkQuads then WeakWall:generateQuads() end
   
   local tw = math.floor(self.width / TILE_SIZE)
   local th = math.floor(self.height / TILE_SIZE)
@@ -46,10 +64,12 @@ function WeakWall:draw()
 end
 
 function WeakWall:die(direction)
-  local count = math.min((self.width * self.height) / (WallChunk.width * WallChunk.height * 4), 50)
+  local count = math.min((self.width * self.height) / (WeakWall.chunkWidth * WeakWall.chunkHeight * 4), 50)
   
   for i = 1, count do
-    self.world:add(WallChunk:new(
+    self.world:add(Chunk:new(
+      assets.images.weakWall,
+      WeakWall.chunkQuads[math.random(1, #WeakWall.chunkQuads)],
       self.x - self.width / 2 + self.width * math.random(),
       self.y - self.height / 2 + self.height * math.random(),
       direction and (direction - math.tau / 4 + math.tau / 4 * math.random()) or math.tau * math.random()

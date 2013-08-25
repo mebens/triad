@@ -61,8 +61,3 @@ function Replayer:handleInput(dt)
     self.inputDown = {}
   end
 end
-
-function Replayer:die()
-  self.world = nil
-  self.dead = true
-end

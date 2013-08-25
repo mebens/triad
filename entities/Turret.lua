@@ -1,6 +1,7 @@
 Turret = class("Turret", PhysicalEntity)
 Turret.static.width = 11
 Turret.static.height = 11
+Turret.static.particle = getRectImage(2, 2)
 
 function Turret.static:fromXML(e)
   return Turret:new(tonumber(e.attr.x) + Turret.width / 2, tonumber(e.attr.y) + Turret.height / 2)
@@ -49,6 +50,7 @@ function Turret:update(dt)
       elseif targetAngle - self.angle <= self.angleFireThreshold then
         self.world:add(Bullet:new(self.x, self.y, self.angle, true))
         self.fireTimer = self.fireTimer + self.fireTime
+        playRandom{assets.sfx.shoot1, assets.sfx.shoot2, assets.sfx.shoot3}
       end
     else
       self.target = nil
@@ -76,7 +78,17 @@ end
 
 function Turret:die()
   self.world = nil
+  playRandom{assets.sfx.explosion1, assets.sfx.explosion2, assets.sfx.explosion3, assets.sfx.explosion4}
   
+  for i = 1, 25 do
+    local g = math.random(20, 100)
+    self.world:add(Chunk:new(Turret.particle, nil, self.x, self.y, math.tau * math.random(), { g, g, g }))
+  end
+  
+  for i = 1, 7 do
+    self.world:add(Chunk:new(Turret.particle, nil, self.x, self.y, math.tau * math.random(), { 255, 210, 0 }))
+  end
+
   if not self.deathTime then
     self.planningRef.deathTime = self.world.elapsed
   end

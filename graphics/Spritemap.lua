@@ -37,7 +37,7 @@ function Spritemap:initialize(img, fw, fh, callback, ...)
     end
   end
   
-  self:setCallback(callback, ...)
+  if callback then self:setCallback(callback, ...) end
   self:stop()
   self:applyAccessors()
 end
@@ -52,7 +52,7 @@ function Spritemap:update(dt)
       self._timer = self._timer + anim.time
       
       if self._animIndex == #anim.frames and not anim.loop then
-        self.callback(unpack(self.callbackArgs))
+        if self.callback then self.callback(unpack(self.callbackArgs)) end
         self:stop()
       else
         self._animIndex = self._animIndex % #anim.frames + 1

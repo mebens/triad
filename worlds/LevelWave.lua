@@ -47,7 +47,7 @@ function LevelWave:update(dt)
   if self.inWave then
     self.elapsed = self.elapsed + dt
     
-    if self.elapsed >= LevelWave.time or (not self.replay and (self.allPlayers.length < 1 or self.allTurrets.length < 1)) then
+    if self.elapsed >= LevelWave.time or (not self.replay and self.allTurrets.length < 1) then
       self:endWave()
     end
   end
@@ -69,9 +69,11 @@ function LevelWave:endWave()
   self.inWave = false
   if self.player then self.player:closeInputs() end
   
-  if self.replay then
-    ammo.world = LevelWave:new(self.planning, true)
-  else
-    self.planning:endWave(self.player)
-  end
+  delay(self.replay and 0 or 1, function()
+    if self.replay then
+      ammo.world = LevelWave:new(self.planning, true)
+    else
+      self.planning:endWave(self.player)
+    end
+  end)
 end

@@ -29,6 +29,7 @@ function Rocket:added()
   self.fixture = self:addShape(love.physics.newRectangleShape(self.width, self.height))
   self.fixture:setMask(2, 12, 15)
   self.fixture:setSensor(true)
+  playRandom{assets.sfx.rocket1, assets.sfx.rocket2}
 end
 
 function Rocket:update(dt)
@@ -52,10 +53,16 @@ function Rocket:die()
   self.dead = true
   self.particles:setEmissionRate(0)
   self.particles:stop()
+  playRandom{assets.sfx.explosion1, assets.sfx.explosion2, assets.sfx.explosion3, assets.sfx.explosion4}
+  
+  for i = 1, 30 do
+    self.world:add(Chunk:new(Rocket.particle, nil, self.x, self.y, math.tau * math.random(), { 255, 180, 0 } ))
+  end
 end
 
 function Rocket:collided(other, fixture, otherFixture, contact)
   if self.dead then return end
+  if instanceOf(Bullet, other) then return end
   
   if instanceOf(Turret, other) then
     other:die()

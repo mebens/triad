@@ -2,6 +2,7 @@ Player = class("Player", PhysicalEntity)
 Player.static.width = 7
 Player.static.height = 9
 Player.static.recordTime = 1 / 100
+Player.static.particle = getRectImage(2, 2)
 
 function Player.static:fromXML(e)
   return Player:new(tonumber(e.attr.x) + Player.width / 2, tonumber(e.attr.y) + Player.height / 2, tonumber(e.attr.type))
@@ -16,7 +17,7 @@ function Player:initialize(x, y, type)
   self.shieldSpeed = 800
   self.shieldMaxHealth = 200
   self.shieldHealth = self.shieldMaxHealth
-  self.health = 4
+  self.health = 2
   self.movementAngle = 0
   self.type = type
   self.color = { 255, 255, 255 }
@@ -74,6 +75,7 @@ function Player:update(dt)
     if self.inputDown.fire then
       self.weaponTimer = self.weaponTimer + self.mgFireRate
       self:fireBullet()
+      playRandom{assets.sfx.shoot1, assets.sfx.shoot2, assets.sfx.shoot3}
     end
   end
 end
@@ -144,6 +146,7 @@ function Player:handleSemiAutoFire()
   if self.type == 2 then
     self:fireBullet()
     self.weaponTimer = self.weaponTimer + self.psFireRate
+    playRandom{assets.sfx.shoot1, assets.sfx.shoot2, assets.sfx.shoot3}
   elseif self.type == 3 then
     for i = 1, self.pelletCount do
       self.world:add(Pellet:new(
@@ -154,6 +157,7 @@ function Player:handleSemiAutoFire()
     end
     
     self.weaponTimer = self.weaponTimer + self.sgFireRate
+    playRandom{assets.sfx.shoot1, assets.sfx.shoot2, assets.sfx.shoot3}
   end
 end
 
@@ -172,8 +176,23 @@ function Player:handleAbility(mx, my)
 end 
 
 function Player:die()
+  self:explode()
+  self.world = nil
   self.dead = true
-  self.world:endWave()
+  playRandom{assets.sfx.death1, assets.sfx.death2}
+  if not instanceOf(Replayer, self) then self.world:endWave() end
+end
+
+function Player:explode()
+  for i = 1, 10 do
+    local g = math.random(20, 70)
+    self.world:add(Chunk:new(Player.particle, nil, self.x, self.y, math.tau * math.random(), { g, g, g }, 1, 1.5))
+  end
+  
+  for i = 1, 7 do
+    local g = math.random(20, 70)
+    self.world:add(Chunk:new(Player.particle, nil, self.x, self.y, math.tau * math.random(), { 210, 0, 0 }, 0.75, 1))
+  end
 end
 
 function Player:closeInputs()
@@ -204,6 +223,7 @@ function Player:bulletHit(bullet)
     if angle < math.tau * 0.16667 then
       damage = false
       self.shieldHealth = self.shieldHealth - bullet.damage
+      playRandom{assets.sfx.shield1, assets.sfx.shield2, assets.sfx.shield3}
       
       if self.shieldHealth <= 0 then
         self.shield = false
@@ -212,7 +232,10 @@ function Player:bulletHit(bullet)
     end
   end
   
-  if damage then self:damage(bullet.damage) end
+  if damage then
+    self:damage(bullet.damage)
+    playRandom{assets.sfx.hit1, assets.sfx.hit2}
+  end
 end
 
 function Player:fireBullet()
