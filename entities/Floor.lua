@@ -5,7 +5,7 @@ function Floor:initialize(xml, width, height)
   self.layer = 7
   self.width = width
   self.height = height
-  self.map = Tilemap:new(assets.images.tiles, 9, 9, width, height)
+  self.map = Tilemap:new(assets.images.tiles, TILE_SIZE, TILE_SIZE, width, height)
   self.map.usePositions = true
   self.color = { 150, 150, 150 }
   if xml then self:loadFromXML(xml) end

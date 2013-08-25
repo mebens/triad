@@ -12,7 +12,8 @@ function LevelBase:initialize(xml)
   self:add(self.floor, self.walls)
   
   self:setupLayers{
-    [0] = 0, -- HUD
+    [-1] = 0, -- HUD
+    [0] = 1, -- smoke
     [1] = 1, -- walls
     [2] = 1, -- player
     [3] = 1, -- replayers
@@ -23,12 +24,13 @@ function LevelBase:initialize(xml)
   }
 end
 
-function LevelBase:loadObjects(active)
-  local elem = findChild(self.xml, "objects")
+function LevelBase:loadCommonObjects(active)
+  --local obj = findChild(self.xml, "objects")
+  local tiled = findChild(self.xml, "tiledObjects")
   
-  for _, v in ipairs(findChildren(elem, "turret")) do
-    local e = Turret:fromXML(v) 
-    if active == false then e.active = false end
-    self:add(e)
+  if tiled then  
+    for _, v in ipairs(findChildren(tiled, "weakWall")) do
+      self:add(WeakWall:fromXML(v))
+    end
   end
 end

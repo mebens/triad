@@ -48,7 +48,7 @@ function Replayer:handleInput(dt)
           if input[2] == "fire" then
             self:handleSemiAutoFire()
           elseif input[2] == "ability" then
-            self:handleAbility()
+            self:handleAbility(input[4], input[5])
           end
         elseif input[3] == "released" then
           self.inputDown[input[2]] = false

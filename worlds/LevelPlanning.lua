@@ -12,6 +12,7 @@ function LevelPlanning:initialize(index, xml)
   self.playerSelections = {}
   self.restarting = false
   self.turrets = {}
+  self:loadCommonObjects()
   
   local obj = findChild(self.xml, "objects")
   
@@ -70,6 +71,11 @@ function LevelPlanning:endWave(player)
     local done = true
     self.allEnemiesKilled = true
     
+    self.selection.played = true
+    self.selection.inputLog = player.inputLog
+    self.selection.posLog = player.posLog
+    self.selection = nil
+    
     for _, v in ipairs(self.turrets) do
       if not v.deathTime then self.allEnemiesKilled = false end
     end
@@ -79,11 +85,6 @@ function LevelPlanning:endWave(player)
         if not v.played then done = false end
       end
     end
-    
-    self.selection.played = true
-    self.selection.inputLog = player.inputLog
-    self.selection.posLog = player.posLog
-    self.selection = nil
     
     if done then
       self.finalReplay = true

@@ -78,4 +78,7 @@
     <player x="192" y="254" type="2"/>
     <player x="212" y="254" type="3"/>
   </objects>
+  <tiledObjects>
+    <weakWall x="171" y="216" width="54" height="18"/>
+  </tiledObjects>
 </level>

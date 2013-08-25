@@ -22,10 +22,10 @@ function Bullet:added()
   self.fixture = self:addShape(love.physics.newRectangleShape(self.width, self.height))
   
   if self.enemy then
-    self.fixture:setMask(3)
+    self.fixture:setMask(3, 12, 15)
     self.fixture:setCategory(3)
   else
-    self.fixture:setMask(2)
+    self.fixture:setMask(2, 12, 15)
     self.fixture:setCategory(2)
   end
   

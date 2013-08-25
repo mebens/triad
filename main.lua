@@ -21,13 +21,18 @@ require("entities.Turret")
 require("entities.Rocket")
 require("entities.Bullet")
 require("entities.Pellet")
+require("entities.WeakWall")
+require("entities.WallChunk")
+require("entities.Smoke")
 
 require("worlds.LevelBase")
 require("worlds.LevelPlanning")
 require("worlds.LevelWave")
 
+TILE_SIZE = 9
+
 function love.load()
-  assets.loadFont("uni05.ttf", 14, "main")
+  assets.loadFont("uni05.ttf", { 16, 8 }, "main")
   assets.loadImage("tiles.png")
   assets.loadImage("player-mg.png", "playerMg")
   assets.loadImage("player-Ps.png", "playerPs")
@@ -36,6 +41,8 @@ function love.load()
   assets.loadImage("player-legs.png", "playerLegs")
   assets.loadImage("turret-base.png", "turretBase")
   assets.loadImage("turret-gun.png", "turretGun")
+  assets.loadImage("weak-wall.png", "weakWall")
+  assets.loadImage("smoke.png")
   assets.loadImage("rocket.png")
   for _, v in pairs(assets.images) do v:setFilter("nearest", "nearest") end
   

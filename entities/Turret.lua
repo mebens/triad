@@ -97,7 +97,7 @@ function Turret:inView(player)
     self.world:rayCast(self.x, self.y, player.x, player.y, function(fixture)
       local e = fixture:getUserData()
       
-      if instanceOf(Walls, e) then
+      if instanceOf(Walls, e) or instanceOf(WeakWall, e) or instanceOf(Smoke, e) then
         ret = false
         return 0
       else

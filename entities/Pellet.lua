@@ -11,5 +11,5 @@ end
 
 function Pellet:update(dt)
   PhysicalEntity.update(self, dt)
-  if math.sqrt(self.velx ^ 2 + self.vely ^ 2) < 100 then self:die() end
+  if math.sqrt(self.velx ^ 2 + self.vely ^ 2) < 150 then self:die() end
 end

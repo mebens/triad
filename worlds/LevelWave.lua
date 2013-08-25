@@ -1,11 +1,12 @@
 LevelWave = class("LevelWave", LevelBase)
 LevelWave.static.time = 10
 
-function LevelWave:initialize(planning)
+function LevelWave:initialize(planning, isRepeat)
   LevelBase.initialize(self, planning.xml)
   self.width = planning.width
   self.height = planning.height
   self.planning = planning
+  self.isRepeat = isRepeat 
   self.inWave = true
   self.paused = false
   self.elapsed = 0
@@ -13,6 +14,7 @@ function LevelWave:initialize(planning)
   self.allTurrets = LinkedList:new("_turretNext", "_turretPrev")
   self.hud = HUD:new()
   self:add(self.hud)
+  self:loadCommonObjects()
   
   if planning.selection then
     local sel = planning.selection
@@ -45,7 +47,7 @@ function LevelWave:update(dt)
   if self.inWave then
     self.elapsed = self.elapsed + dt
     
-    if self.elapsed >= LevelWave.time or self.allPlayers.length < 1 or (not self.replay and self.allTurrets.length < 1) then
+    if self.elapsed >= LevelWave.time or (not self.replay and (self.allPlayers.length < 1 or self.allTurrets.length < 1)) then
       self:endWave()
     end
   end
@@ -66,5 +68,10 @@ end
 function LevelWave:endWave()
   self.inWave = false
   if self.player then self.player:closeInputs() end
-  if not self.replay then self.planning:endWave(self.player) end
+  
+  if self.replay then
+    ammo.world = LevelWave:new(self.planning, true)
+  else
+    self.planning:endWave(self.player)
+  end
 end

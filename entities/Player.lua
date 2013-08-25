@@ -34,7 +34,7 @@ function Player:initialize(x, y, type)
   end
     
   self.bulletDeviation = math.tau / 128
-  self.pelletDeviation = math.tau / 12
+  self.pelletDeviation = math.tau / 10
   self.pelletCount = 6
   self.mgFireRate = 0.1
   self.psFireRate = 0.1
@@ -66,6 +66,7 @@ function Player:update(dt)
   PhysicalEntity.update(self, dt)
   self.legsMap:update(dt)
   self:handleInput(dt)
+  self:setAngularVelocity(0)
   
   if self.weaponTimer > 0 then
     self.weaponTimer = self.weaponTimer - dt
@@ -117,7 +118,7 @@ function Player:handleInput(dt)
   for _, v in pairs{"fire", "ability"} do
     if input.pressed(v) then
       self.inputDown[v] = true
-      self.inputLog[#self.inputLog + 1] = { self.world.elapsed, v, "pressed" }
+      self.inputLog[#self.inputLog + 1] = { self.world.elapsed, v, "pressed", getMouse() }
     elseif input.released(v) then
       self.inputDown[v] = false
       self.inputLog[#self.inputLog + 1] = { self.world.elapsed, v, "released" }
@@ -125,7 +126,7 @@ function Player:handleInput(dt)
   end
   
   if input.pressed("fire") then self:handleSemiAutoFire() end
-  if input.pressed("ability") then self:handleAbility() end
+  if input.pressed("ability") then self:handleAbility(getMouse()) end
 end
 
 function Player:handleAnimation(moving)
@@ -156,15 +157,16 @@ function Player:handleSemiAutoFire()
   end
 end
 
-function Player:handleAbility()
+function Player:handleAbility(mx, my)
   if self.abilityUsed then return end
   
   if self.type == 1 then
-    
+    self.world:add(Smoke:new(mx, my))
+    self.abilityUsed = true
   elseif self.type == 2 then
     self.shield = not self.shield
   elseif self.type == 3 then
-    self.world:add(Rocket:new(self.x, self.y, self.angle))
+    self.world:add(Rocket:new(self.x + 10 * math.cos(self.angle), self.y + 10 * math.sin(self.angle), self.angle))
     self.abilityUsed = true
   end
 end 
