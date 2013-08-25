@@ -2,7 +2,7 @@ Floor = class("Floor", Entity)
 
 function Floor:initialize(xml, width, height)
   Entity.initialize(self)
-  self.layer = 7
+  self.layer = 8
   self.width = width
   self.height = height
   self.map = Tilemap:new(assets.images.tiles, TILE_SIZE, TILE_SIZE, width, height)

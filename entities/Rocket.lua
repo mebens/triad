@@ -4,7 +4,7 @@ Rocket.static.particle = getRectImage(2, 2)
 
 function Rocket:initialize(x, y, angle)
   PhysicalEntity.initialize(self, x, y, "dynamic")
-  self.layer = 5
+  self.layer = 6
   self.angle = angle
   self.image = assets.images.rocket
   self.width = self.image:getWidth()

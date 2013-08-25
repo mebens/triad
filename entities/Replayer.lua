@@ -1,12 +1,13 @@
 Replayer = class("Replayer", Player)
 
-function Replayer:initialize(x, y, type, inputs, pos)
+function Replayer:initialize(x, y, type, inputs, pos, deathTime)
   Player.initialize(self, x, y, type)
   self.color[4] = 150
   self.inputLog = inputs
   self.posLog = pos
   self.inputLogCopy = table.copy(inputs)
   self.posLogCopy = table.copy(pos)
+  self.deathTime = deathTime
 end
 
 function Replayer:handleInput(dt)
@@ -60,4 +61,8 @@ function Replayer:handleInput(dt)
   elseif self.world.elapsed > LevelWave.time then
     self.inputDown = {}
   end
+end
+
+function Replayer:die()
+  if self.deathTime and self.world.elapsed >= self.deathTime then Player.die(self) end
 end

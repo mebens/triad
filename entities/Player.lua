@@ -10,7 +10,7 @@ end
 
 function Player:initialize(x, y, type)
   PhysicalEntity.initialize(self, x, y, "dynamic")
-  self.layer = 2
+  self.layer = 3
   self.width = Player.width
   self.height = Player.height
   self.speed = 1800
@@ -157,7 +157,7 @@ function Player:handleSemiAutoFire()
     end
     
     self.weaponTimer = self.weaponTimer + self.sgFireRate
-    playRandom{assets.sfx.shoot1, assets.sfx.shoot2, assets.sfx.shoot3}
+    playRandom{assets.sfx.shotgun1, assets.sfx.shotgun2}
   end
 end
 
@@ -180,7 +180,11 @@ function Player:die()
   self.world = nil
   self.dead = true
   playRandom{assets.sfx.death1, assets.sfx.death2}
-  if not instanceOf(Replayer, self) then self.world:endWave() end
+  
+  if not instanceOf(Replayer, self) then
+    self.deathTime = self.world.elapsed
+    self.world:endWave()
+  end
 end
 
 function Player:explode()
@@ -220,7 +224,7 @@ function Player:bulletHit(bullet)
     local facing = Vector:new(math.cos(self.angle), math.sin(self.angle))
     local angle = math.acos(facing * pos)
     
-    if angle < math.tau * 0.16667 then
+    if angle < math.tau * 0.19444 then
       damage = false
       self.shieldHealth = self.shieldHealth - bullet.damage
       playRandom{assets.sfx.shield1, assets.sfx.shield2, assets.sfx.shield3}

@@ -4,11 +4,16 @@ Turret.static.height = 11
 Turret.static.particle = getRectImage(2, 2)
 
 function Turret.static:fromXML(e)
-  return Turret:new(tonumber(e.attr.x) + Turret.width / 2, tonumber(e.attr.y) + Turret.height / 2)
+  return Turret:new(
+    tonumber(e.attr.x) + Turret.width / 2,
+    tonumber(e.attr.y) + Turret.height / 2,
+    math.rad(tonumber(e.attr.angle))
+  )
 end
 
-function Turret:initialize(x, y, ref)
+function Turret:initialize(x, y, angle, ref)
   PhysicalEntity.initialize(self, x, y, "static")
+  self.layer = 5
   self.baseImg = assets.images.turretBase
   self.gunImg = assets.images.turretGun
   self.width = self.baseImg:getWidth()
@@ -16,6 +21,8 @@ function Turret:initialize(x, y, ref)
   self.health = 12
   self.fireTimer = 0
   self.planningRef = ref
+  self.angle = angle or 0
+  self.dead = false
   
   if ref then self.deathTime = ref.deathTime end
   self.fireTime = 0.1
@@ -77,7 +84,9 @@ function Turret:draw()
 end
 
 function Turret:die()
+  if self.dead then return end
   self.world = nil
+  self.dead = true
   playRandom{assets.sfx.explosion1, assets.sfx.explosion2, assets.sfx.explosion3, assets.sfx.explosion4}
   
   for i = 1, 25 do

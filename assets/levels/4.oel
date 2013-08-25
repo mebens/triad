@@ -1,0 +1,80 @@
+<level>
+  <width>396</width>
+  <height>306</height>
+  <collision set="collision">
+    <rect id="0" x="0" y="0" w="117" h="135"/>
+    <rect id="0" x="279" y="0" w="117" h="135"/>
+    <rect id="0" x="0" y="171" w="117" h="135"/>
+    <rect id="0" x="279" y="171" w="117" h="135"/>
+    <rect id="0" x="351" y="135" w="45" h="36"/>
+    <rect id="0" x="117" y="0" w="162" h="27"/>
+    <rect id="0" x="0" y="135" w="45" h="36"/>
+    <rect id="0" x="117" y="279" w="162" h="27"/>
+    <rect id="0" x="216" y="117" w="63" h="18"/>
+    <rect id="0" x="117" y="117" w="63" h="18"/>
+    <rect id="0" x="117" y="171" w="63" h="18"/>
+    <rect id="0" x="216" y="171" w="63" h="18"/>
+  </collision>
+  <floor set="tiles">
+    <rect id="0" x="0" y="0" w="396" h="306"/>
+  </floor>
+  <walls set="tiles">
+    <tile id="7" x="171" y="171"/>
+    <tile id="8" x="216" y="171"/>
+    <tile id="6" x="216" y="180"/>
+    <tile id="5" x="171" y="180"/>
+    <tile id="5" x="171" y="126"/>
+    <tile id="6" x="216" y="126"/>
+    <tile id="7" x="171" y="117"/>
+    <tile id="8" x="216" y="117"/>
+    <rect id="1" x="117" y="180" w="54" h="9"/>
+    <rect id="4" x="108" y="189" w="9" h="90"/>
+    <rect id="3" x="117" y="279" w="162" h="9"/>
+    <rect id="1" x="225" y="180" w="54" h="9"/>
+    <rect id="2" x="279" y="189" w="9" h="90"/>
+    <rect id="3" x="225" y="117" w="54" h="9"/>
+    <rect id="3" x="117" y="117" w="54" h="9"/>
+    <rect id="4" x="108" y="27" w="9" h="90"/>
+    <rect id="2" x="279" y="27" w="9" h="90"/>
+    <rect id="1" x="117" y="18" w="162" h="9"/>
+    <rect id="1" x="45" y="126" w="126" h="9"/>
+    <rect id="1" x="225" y="126" w="126" h="9"/>
+    <rect id="2" x="351" y="135" w="9" h="36"/>
+    <rect id="4" x="36" y="135" w="9" h="36"/>
+    <rect id="3" x="45" y="171" w="126" h="9"/>
+    <rect id="3" x="225" y="171" w="126" h="9"/>
+    <rect id="0" x="0" y="0" w="108" h="126"/>
+    <rect id="0" x="288" y="0" w="108" h="126"/>
+    <rect id="0" x="288" y="180" w="108" h="126"/>
+    <rect id="0" x="0" y="180" w="108" h="126"/>
+    <tile id="0" x="108" y="180"/>
+    <tile id="0" x="108" y="117"/>
+    <tile id="0" x="279" y="117"/>
+    <tile id="0" x="279" y="180"/>
+    <rect id="0" x="108" y="288" w="180" h="18"/>
+    <rect id="0" x="108" y="0" w="180" h="18"/>
+    <tile id="0" x="279" y="18"/>
+    <tile id="0" x="108" y="18"/>
+    <rect id="0" x="360" y="126" w="36" h="54"/>
+    <rect id="0" x="0" y="126" w="36" h="54"/>
+    <tile id="0" x="36" y="171"/>
+    <tile id="0" x="36" y="126"/>
+    <tile id="0" x="351" y="126"/>
+    <tile id="0" x="351" y="171"/>
+    <tile id="0" x="108" y="279"/>
+    <tile id="0" x="279" y="279"/>
+  </walls>
+  <objects>
+    <turret x="148" y="95" angle="0"/>
+    <turret x="238" y="95" angle="180"/>
+    <turret x="193" y="40" angle="45"/>
+    <turret x="238" y="248" angle="180"/>
+    <turret x="148" y="248" angle="0"/>
+    <player x="123" y="149" type="3"/>
+    <player x="267" y="140" type="1"/>
+    <player x="267" y="159" type="2"/>
+  </objects>
+  <tiledObjects>
+    <weakWall x="171" y="171" width="54" height="18"/>
+  </tiledObjects>
+</level>

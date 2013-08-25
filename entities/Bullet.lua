@@ -4,7 +4,7 @@ Bullet.static.speed = 750
 
 function Bullet:initialize(x, y, angle, enemy)
   PhysicalEntity.initialize(self, x, y, "dynamic")
-  self.layer = 5
+  self.layer = 6
   self.width = Bullet.image:getWidth()
   self.height = Bullet.image:getHeight()
   self.velx = Bullet.speed * math.cos(angle)

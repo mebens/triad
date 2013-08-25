@@ -23,14 +23,14 @@ end
 
 function WeakWall:initialize(x, y, width, height)
   PhysicalEntity.initialize(self, x + width / 2, y + height / 2, "static")
-  self.layer = 1
+  self.layer = 2
   self.width = width
   self.height = height
   self.map = Tilemap:new(assets.images.weakWall, TILE_SIZE, TILE_SIZE, width, height)
   if not WeakWall.chunkQuads then WeakWall:generateQuads() end
   
-  local tw = math.floor(self.width / TILE_SIZE)
-  local th = math.floor(self.height / TILE_SIZE)
+  local tw = math.ceil(self.width / TILE_SIZE)
+  local th = math.ceil(self.height / TILE_SIZE)
   
   -- four corners
   self.map:set(0, 0, 1)
@@ -51,7 +51,7 @@ function WeakWall:initialize(x, y, width, height)
   end
   
   -- middle filler
-  if tw > 2 or th > 2 then self.map:setRect(1, 1, tw - 2, th - 2, 5) end
+  if tw > 2 and th > 2 then self.map:setRect(1, 1, tw - 2, th - 2, 5) end
 end
 
 function WeakWall:added()

@@ -1,5 +1,5 @@
 LevelPlanning = class("LevelPlanning", LevelBase)
-LevelPlanning.static.levels = { "1", "2" }
+LevelPlanning.static.levels = { "1", "2", "3", "4", "5" }
 
 function LevelPlanning:initialize(index, xml)
   if not xml then
@@ -74,6 +74,7 @@ function LevelPlanning:endWave(player)
     self.selection.played = true
     self.selection.inputLog = player.inputLog
     self.selection.posLog = player.posLog
+    self.selection.deathTime = player.deathTime
     self.selection = nil
     
     for _, v in ipairs(self.turrets) do

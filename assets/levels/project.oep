@@ -24,7 +24,12 @@
       </values>
     </object>
     
-    <object name="turret" image="turret-base.png" width="11" height="11" />
+    <object name="turret" image="turret-base.png" width="11" height="11">
+      <values>
+        <number name="angle" default="0" />
+      </values>
+    </object>
+    
     <object name="weakWall" image="editor.png" width="9" height="9" resizableX="true" resizableY="true" imageWidth="9" imageHeight="9" tile="true" />
   </objects>
   

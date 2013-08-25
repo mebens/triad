@@ -2,7 +2,7 @@ Chunk = class("Chunk", PhysicalEntity)
 
 function Chunk:initialize(img, quad, x, y, angle, color, minForce, maxForce)
   PhysicalEntity.initialize(self, x, y, "dynamic")
-  self.layer = 6
+  self.layer = 7
   self.angle = angle
   self.image = img
   self.quad = quad

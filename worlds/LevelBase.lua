@@ -15,12 +15,13 @@ function LevelBase:initialize(xml)
     [-1] = 0, -- HUD
     [0] = 1, -- smoke
     [1] = 1, -- walls
-    [2] = 1, -- player
-    [3] = 1, -- replayers
-    [4] = 1, -- enemies
-    [5] = 1, -- projectile
-    [6] = 1, -- effects
-    [7] = 1, -- floor 
+    [2] = 1, -- weak walls
+    [3] = 1, -- player
+    [4] = 1, -- replayers
+    [5] = 1, -- turrets
+    [6] = 1, -- projectile
+    [7] = 1, -- effects
+    [8] = 1, -- floor 
   }
 end
 

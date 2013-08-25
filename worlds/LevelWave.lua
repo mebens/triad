@@ -26,12 +26,12 @@ function LevelWave:initialize(planning, isRepeat)
   
   for _, v in ipairs(planning.playerSelections) do
     if v ~= planning.selection and v.played then
-      self:add(Replayer:new(v.x, v.y, v.type, v.inputLog, v.posLog))
+      self:add(Replayer:new(v.x, v.y, v.type, v.inputLog, v.posLog, v.deathTime))
     end
   end
   
   for _, v in ipairs(planning.turrets) do
-    self:add(Turret:new(v.x, v.y, v))
+    self:add(Turret:new(v.x, v.y, v.angle, v))
   end
 end
 
@@ -52,17 +52,18 @@ function LevelWave:update(dt)
     end
   end
   
+  local restart = input.pressed("restart")
+  
   if self.replay then
-    local restart = input.pressed("restart")
-    
     if not self.planning.allEnemiesKilled then
       restart = restart or input.pressed("progress")
     elseif input.pressed("progress") then
       self.planning:nextLevel()
+      restart = false
     end
-    
-    if restart then self.planning:restart() end
   end
+  
+  if restart then self.planning:restart() end
 end
 
 function LevelWave:endWave()
