@@ -61,7 +61,9 @@ function love.load()
   assets.loadSfx("hit1.mp3")
   assets.loadSfx("hit2.mp3")
   assets.loadSfx("rocket1.mp3", 0.7)
-  assets.loadSfx("rocket2.mp3", 0.7)
+  assets.loadSfx("rocket2.mp3", 0.7)  
+  assets.loadSfx("smoke1.mp3", 0.3)
+  assets.loadSfx("smoke2.mp3", 0.3)
   
   postfx.init()
   postfx.scale = 2

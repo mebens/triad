@@ -29,6 +29,7 @@ function Smoke:added()
   self.fixture = self:addShape(love.physics.newRectangleShape(self.width, self.height))
   self.fixture:setSensor(true)
   self.fixture:setCategory(15)
+  playRandom{assets.sfx.smoke1, assets.sfx.smoke2}
 end
 
 function Smoke:update(dt)

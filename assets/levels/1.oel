@@ -15,7 +15,7 @@
     <rect id="0" x="27" y="279" w="342" h="27"/>
   </collision>
   <floor set="tiles">
-    <rect id="0" x="-9" y="0" w="405" h="306"/>
+    <rect id="0" x="0" y="0" w="396" h="306"/>
   </floor>
   <walls set="tiles">
     <tile id="0" x="369" y="279"/>
