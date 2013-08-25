@@ -1,5 +1,5 @@
 LevelPlanning = class("LevelPlanning", LevelBase)
-LevelPlanning.static.levels = { "1", "2", "3", "4", "5" }
+LevelPlanning.static.levels = { "1", "2", "3", "4", "5", "6", "7", "9" }
 
 function LevelPlanning:initialize(index, xml)
   if not xml then
