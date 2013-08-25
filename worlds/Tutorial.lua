@@ -45,7 +45,7 @@ function Tutorial:initialize()
   
   self:addPage(assets.images.tutorialMg, "The Gunner",
     "Weapon: Machine Gun",
-    "Ability: Smoke screen. Blocks turret's vision of your soldiers. Single-use."
+    "Ability: Smoke screen. Blocks turret's vision of your soldiers. Use RMB to deploy it on the crosshair. Single-use."
   )
   
   self:addPage(assets.images.tutorialPs, "The Shield",
@@ -55,7 +55,7 @@ function Tutorial:initialize()
   
   self:addPage(assets.images.tutorialSg, "The Demo",
     "Weapon: Shotgun",
-    "Ability: Rocket. Used primarily to destroy weak walls. Single-use."
+    "Ability: Rocket. Used primarily to destroy weak walls. Use RMB to fire it in the direction of the crosshair. Single-use."
   )
   
   self:addPage(assets.images.tutorialWalls, "Weak Walls",
@@ -111,10 +111,10 @@ function Tutorial:switchPage(index)
     self.header.color[4] = 255
     self.text.color[4] = 255
     self.imgColor[4] = 255
-    tween(self.text.color, self.fadeTime, { [4] = 0 })
-    tween(self.imgColor, self.fadeTime, { [4] = 0 })
+    tween(self.text.color, self.fadeTime, { [4] = 0 }, ease.quadIn)
+    tween(self.imgColor, self.fadeTime, { [4] = 0 }, ease.quadIn)
     
-    tween(self.header.color, self.fadeTime, { [4] = 0 }, nil, function()
+    tween(self.header.color, self.fadeTime, { [4] = 0 }, ease.quadIn, function()
       self.current = nil
       self:switchPage(index)
     end)
@@ -123,9 +123,9 @@ function Tutorial:switchPage(index)
     self.header.color[4] = 0
     self.text.color[4] = 0
     self.imgColor[4] = 0
-    tween(self.header.color, self.fadeTime, { [4] = 255 })
-    tween(self.text.color, self.fadeTime, { [4] = 255 })
-    tween(self.imgColor, self.fadeTime, { [4] = 255 })
+    tween(self.header.color, self.fadeTime, { [4] = 255 }, ease.quadOut)
+    tween(self.text.color, self.fadeTime, { [4] = 255 }, ease.quadOut)
+    tween(self.imgColor, self.fadeTime, { [4] = 255 }, ease.quadOut)
     
     local p = self.pages[index]
     self.header.text = p.header

@@ -41,7 +41,7 @@ function love.load()
   assets.loadImage("tiles.png")
   assets.loadImage("crosshair.png")
   assets.loadImage("player-mg.png", "playerMg")
-  assets.loadImage("player-Ps.png", "playerPs")
+  assets.loadImage("player-ps.png", "playerPs")
   assets.loadImage("player-sg.png", "playerSg")
   assets.loadImage("player-shield.png", "playerShield")
   assets.loadImage("player-legs.png", "playerLegs")
@@ -102,7 +102,6 @@ function love.load()
   
   music = assets.music.music:loop()
   musicMuted = false
-  paused = false
   ammo.world = Tutorial:new()
 end
 

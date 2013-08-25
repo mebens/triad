@@ -66,7 +66,7 @@
   </walls>
   <objects>
     <turret x="166" y="49" angle="70"/>
-    <turret x="220" y="49" angle="250"/>
+    <turret x="220" y="49" angle="135"/>
     <turret x="238" y="248" angle="225"/>
     <turret x="148" y="248" angle="315"/>
     <player x="123" y="149" type="3"/>

@@ -50,7 +50,7 @@ function Turret:update(dt)
   if self.target then
     if not self.target.dead and self:inView(self.target) then
       local targetAngle = math.angle(self.x, self.y, self.target.x, self.target.y)
-      self.angle = self.angle + math.min(targetAngle - self.angle, self.angleMoveRate * dt)
+      self.angle = (self.angle + math.min(targetAngle - self.angle, self.angleMoveRate * dt)) % math.tau
       
       if self.fireTimer > 0 then
         self.fireTimer = self.fireTimer - dt
