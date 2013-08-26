@@ -10,7 +10,6 @@ function LevelPlanning:initialize(index, xml)
   LevelBase.initialize(self, xml)
   self.index = index
   self.playerSelections = {}
-  self.restarting = false
   self.turrets = {}
   self:loadCommonObjects()
   
@@ -35,13 +34,12 @@ function LevelPlanning:start()
   
   for _, v in ipairs(self.playerSelections) do
     v.alpha = 0
-    v:animate(0.25, { alpha = 255 })
+    v:animate(0.25, { alpha = 255 }, ease.quadOut)
   end
 end
 
 function LevelPlanning:update(dt)
   LevelBase.update(self, dt)
-  if key.pressed.n then self:nextLevel() end
   if input.pressed("restart") then self:restart() end
 end
 
@@ -56,7 +54,7 @@ function LevelPlanning:beginWave(selection)
   
   for _, v in ipairs(self.playerSelections) do
     if v ~= selection and not v.played then
-      v:animate(0.25, { alpha = 0 })
+      v:animate(0.25, { alpha = 0 }, ease.quadIn)
       skipFade = false
     end
   end
@@ -69,6 +67,7 @@ function LevelPlanning:beginWave(selection)
 end
 
 function LevelPlanning:endWave(player)
+  if self.restarting then return end
   ammo.world = self
   
   if not self.finalReplay and self.selection then
@@ -92,6 +91,7 @@ function LevelPlanning:endWave(player)
     end
     
     if done then
+      data.levelComplete(self.index)
       self.finalReplay = true
       ammo.world = LevelWave:new(self)
     end
@@ -99,14 +99,13 @@ function LevelPlanning:endWave(player)
 end
 
 function LevelPlanning:restart()
-  if self.restarting then return end
   self.restarting = true
   fade.fadeOut(0.5, function() ammo.world = LevelPlanning:new(self.index, self.xml) end)
 end
 
 function LevelPlanning:nextLevel()
   if self.index == #LevelPlanning.levels then
-    -- end
+    fade.fadeOut(0.5, function() ammo.world = MainMenu:new() end)
   else
     fade.fadeOut(0.5, function() ammo.world = LevelPlanning:new(self.index + 1) end)
   end

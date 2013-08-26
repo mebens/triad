@@ -72,6 +72,7 @@ end
 
 function Tutorial:start()
   self:switchPage(1)
+  fade.fadeIn(0.5)
 end
 
 function Tutorial:update(dt)

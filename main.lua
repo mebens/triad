@@ -11,6 +11,7 @@ require("misc.utils")
 require("misc.xmlFuncs")
 require("misc.fade")
 require("misc.noise")
+require("misc.data")
 
 require("entities.HUD")
 require("entities.Floor")
@@ -25,16 +26,21 @@ require("entities.Pellet")
 require("entities.WeakWall")
 require("entities.Chunk")
 require("entities.Smoke")
+require("entities.Menu")
+require("entities.MenuItem")
+require("entities.SelectionItem")
+require("entities.MenuTriangle")
 
 require("worlds.LevelBase")
 require("worlds.LevelPlanning")
 require("worlds.LevelWave")
 require("worlds.Tutorial")
+require("worlds.MainMenu")
 
 TILE_SIZE = 9
 
 function love.load()
-  assets.loadFont("uni05.ttf", { 16, 8 }, "main")
+  assets.loadFont("uni05.ttf", { 24, 16, 8 }, "main")
   assets.loadMusic("music.mp3")
   assets.loadEffect("noise.frag")
   
@@ -43,6 +49,9 @@ function love.load()
   assets.loadImage("player-mg.png", "playerMg")
   assets.loadImage("player-ps.png", "playerPs")
   assets.loadImage("player-sg.png", "playerSg")
+  assets.loadImage("player-mg-used.png", "playerMgUsed")
+  assets.loadImage("player-ps-used.png", "playerPsUsed")
+  assets.loadImage("player-sg-used.png", "playerSgUsed")
   assets.loadImage("player-shield.png", "playerShield")
   assets.loadImage("player-legs.png", "playerLegs")
   assets.loadImage("turret-base.png", "turretBase")
@@ -81,6 +90,7 @@ function love.load()
   assets.loadSfx("step3.mp3", 0.3)
   assets.loadSfx("step4.mp3", 0.3)
   
+  data.init()
   noise:init()
   postfx.init()
   postfx.scale = 2
@@ -99,10 +109,11 @@ function love.load()
   input.define("restart", "r")
   input.define("muteMusic", "m")
   input.define("quit", "escape")
+  input.define("menuSelect", " ", "return")
   
   music = assets.music.music:loop()
   musicMuted = false
-  ammo.world = Tutorial:new()
+  ammo.world = MainMenu:new()
 end
 
 function love.update(dt)

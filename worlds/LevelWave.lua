@@ -40,7 +40,7 @@ function LevelWave:start()
 end
 
 function LevelWave:update(dt)
-  if key.pressed.t then self.paused = not self.paused end
+  --if key.pressed.t then self.paused = not self.paused end
   if self.paused then return end
   PhysicalWorld.update(self, dt)
   

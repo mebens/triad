@@ -24,7 +24,11 @@ function HUD:update(dt)
   
   if self.world.replay then
     if self.world.planning.allEnemiesKilled then
-      self.message.text = "Press space to continue, or press R to restart."
+      if self.world.planning.index == #LevelPlanning.levels then
+        self.message.text = "Press space to return to menu, or press R to restart."
+      else
+        self.message.text = "Press space to continue, or press R to restart."
+      end
     else
       self.message.text = "Press space or R to restart."
     end

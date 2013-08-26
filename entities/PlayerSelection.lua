@@ -18,10 +18,13 @@ function PlayerSelection:initialize(x, y, type)
   
   if self.type == 1 then
     self.image = assets.images.playerMg
+    self.usedImage = assets.images.playerMgUsed
   elseif self.type == 2 then
     self.image = assets.images.playerPs
+    self.usedImage = assets.images.playerPsUsed
   elseif self.type == 3 then
     self.image = assets.images.playerSg
+    self.usedImage = assets.images.playerSgUsed
   end
 end
 
@@ -40,15 +43,18 @@ end
 
 function PlayerSelection:draw()
   if self.played then
-    love.graphics.setColor(255, 0, 0, math.max(0, self.alpha - 55))
+    love.graphics.setColor(255, 255, 255, math.max(0, self.alpha - 55))
     self.scale = 1
-  elseif self.mouseOver then
-    love.graphics.setColor(255, 255, 255, self.alpha)
-    self.scale = 1.2
+    self:drawImage(self.usedImage)
   else
-    love.graphics.setColor(255, 255, 255, math.max(0, self.alpha - 105))
-    self.scale = 1
-  end
+    if self.mouseOver then
+      love.graphics.setColor(255, 255, 255, self.alpha)
+      self.scale = 1.2
+    else
+      love.graphics.setColor(255, 255, 255, math.max(0, self.alpha - 105))
+      self.scale = 1
+    end
   
-  self:drawImage()
+    self:drawImage()
+  end
 end
