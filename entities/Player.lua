@@ -154,11 +154,7 @@ end
 function Player:handleSemiAutoFire()
   if self.weaponTimer > 0 then return end
   
-  if self.type == 2 then
-    self:fireBullet()
-    self.weaponTimer = self.weaponTimer + self.psFireRate
-    playRandom{assets.sfx.shoot1, assets.sfx.shoot2, assets.sfx.shoot3}
-  elseif self.type == 3 then
+  if self.type == 3 then
     for i = 1, self.pelletCount do
       self.world:add(Pellet:new(
         self.x,
@@ -169,6 +165,10 @@ function Player:handleSemiAutoFire()
     
     self.weaponTimer = self.weaponTimer + self.sgFireRate
     playRandom{assets.sfx.shotgun1, assets.sfx.shotgun2}
+  elseif self.type == 2 and not self.shield then
+    self:fireBullet()
+    self.weaponTimer = self.weaponTimer + self.psFireRate
+    playRandom{assets.sfx.shoot1, assets.sfx.shoot2, assets.sfx.shoot3}
   end
 end
 
